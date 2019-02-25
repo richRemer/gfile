@@ -68,6 +68,7 @@ int main(int argc, char* argv[]) {
     GtkTreeIter item;
     GList* icon_list;
     GdkPixbuf* folder_icon;
+    GdkPixbuf* text_icon;
 
     gtk_init(&argc, &argv);
     init_styles();
@@ -99,12 +100,17 @@ int main(int argc, char* argv[]) {
     gtk_header_bar_pack_start(GTK_HEADER_BAR(header), header_box);
 
     folder_icon = load_icon("folder", 32);
+    text_icon = load_icon("text-x-generic", 32);
 
     files = gtk_list_store_new(3, G_TYPE_INT, G_TYPE_STRING, GDK_TYPE_PIXBUF);
     gtk_list_store_append(files, &item);
     gtk_list_store_set(files, &item, 0, 0, 1, "..", 2, folder_icon, -1);
+    gtk_list_store_append(files, &item);
+    gtk_list_store_set(files, &item, 0, 1, 1, "foo", 2, text_icon, -1);
 
     file_view = gtk_icon_view_new_with_model(GTK_TREE_MODEL(files));
+    gtk_icon_view_set_selection_mode(GTK_ICON_VIEW(file_view), GTK_SELECTION_MULTIPLE);
+    gtk_icon_view_set_item_width(GTK_ICON_VIEW(file_view), 64);
     gtk_icon_view_set_text_column(GTK_ICON_VIEW(file_view), 1);
     gtk_icon_view_set_pixbuf_column(GTK_ICON_VIEW(file_view), 2);
 
