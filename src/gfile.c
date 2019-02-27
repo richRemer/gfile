@@ -7,6 +7,7 @@ extern unsigned char gfile_css[];
 extern unsigned int gfile_css_len;
 
 #define HEADER_BAR
+#define OPEN_CMD "xdg-open"
 
 static void init_styles() {
     GtkCssProvider* styles;
@@ -93,10 +94,20 @@ static void activate(GtkIconView* widget, GtkTreePath* path, gpointer data) {
     GtkTreeModel* tree = GTK_TREE_MODEL(data);
     GtkTreeIter iter;
     GValue value = G_VALUE_INIT;
+    const gchar* str_value;
+    const gchar* cmd_name = OPEN_CMD;
+    char* cmd;
 
     if (gtk_tree_model_get_iter(tree, &iter, path)) {
         gtk_tree_model_get_value(tree, &iter, 3, &value);
-        printf("%s\n", g_value_get_string(&value));
+
+        str_value = g_value_get_string(&value);
+        cmd = malloc(strlen(str_value) + strlen(cmd_name) + 4);
+
+        sprintf(cmd, "%s %s &", cmd_name, str_value);
+        system(cmd);
+
+        free(cmd);
         g_value_unset(&value);
     }
 }
