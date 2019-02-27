@@ -1,5 +1,6 @@
 app = gfile
 src = src
+inc = inc
 bin = bin
 build = build
 deps = gtk+-3.0
@@ -9,7 +10,7 @@ objects = $(build)/$(app)_css.o $(patsubst $(src)/%.c, $(build)/%.o, $(shell fin
 cc = gcc
 ld = gcc
 
-cflags = $(shell pkg-config --cflags $(deps))
+cflags = $(shell pkg-config --cflags $(deps)) -I$(inc)
 ldflags = $(shell pkg-config --libs $(deps))
 
 default: build

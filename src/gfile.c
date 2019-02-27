@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <gtk/gtk.h>
+#include "gfile-app.h"
 
 extern unsigned char gfile_css[];
 extern unsigned int gfile_css_len;
@@ -54,6 +55,7 @@ static void add_style_class(GtkWidget* widget, const char* style_class) {
 }
 
 int main(int argc, char* argv[]) {
+    GFileApp app = create_gfile_app();
     GtkWidget* window;
     GtkWidget* window_box;
     GtkWidget* header;
@@ -95,7 +97,7 @@ int main(int argc, char* argv[]) {
     gtk_box_pack_start(GTK_BOX(header_box), path_right_button, FALSE, TRUE, 0);
 
     header = gtk_header_bar_new();
-    gtk_header_bar_set_title(GTK_HEADER_BAR(header), "~");
+    gtk_header_bar_set_title(GTK_HEADER_BAR(header), gfile_app_get_basename(app));
     gtk_header_bar_set_has_subtitle(GTK_HEADER_BAR(header), FALSE);
     gtk_header_bar_pack_start(GTK_HEADER_BAR(header), header_box);
 
@@ -127,6 +129,7 @@ int main(int argc, char* argv[]) {
 
     gtk_widget_show_all(window);
     gtk_main();
+    destroy_gfile_app(app);
 
     return 0;
 }
