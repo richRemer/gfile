@@ -6,6 +6,8 @@
 extern unsigned char gfile_css[];
 extern unsigned int gfile_css_len;
 
+#define HEADER_BAR
+
 static void init_styles() {
     GtkCssProvider* styles;
     GdkScreen* screen;
@@ -201,7 +203,9 @@ int main(int argc, char* argv[]) {
     gtk_window_set_title(GTK_WINDOW(window), "Files");
     gtk_window_set_default_size(GTK_WINDOW(window), 500, 300);
     gtk_window_set_icon_list(GTK_WINDOW(window), icon_list);
+#ifdef HEADER_BAR
     gtk_window_set_titlebar(GTK_WINDOW(window), header);
+#endif
     gtk_container_add(GTK_CONTAINER(window), window_box);
     g_signal_connect(G_OBJECT(window), "destroy", gtk_main_quit, NULL);
 
