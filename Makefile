@@ -22,6 +22,7 @@ build: $(bin)/$(app)
 
 install: $(bin)/$(app)
 	cp $< /usr/local/bin/$(app)
+	cp share/gfile.desktop /usr/share/applications/
 
 clean:
 	rm -fr $(build)/* $(bin)/*

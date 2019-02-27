@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=GFile
+Exec=gfile
+Terminal=false
+Type=Application
+Icon=system-file-manager
+Categories=GTK;Utility;
+
