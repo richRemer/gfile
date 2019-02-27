@@ -44,8 +44,41 @@ static GList* load_icon_list(const char* icon_name) {
 
 static GdkPixbuf* load_icon(const char* icon_name, int size) {
     GtkIconTheme* theme;
+    GtkIconLookupFlags flags = GTK_ICON_LOOKUP_FORCE_SIZE;
+
     theme = gtk_icon_theme_get_default();
-    return gtk_icon_theme_load_icon(theme, icon_name, size, 0, NULL);
+    return gtk_icon_theme_load_icon(theme, icon_name, size, flags, NULL);
+}
+
+static GdkPixbuf* load_icon_with_emblem(
+    const char* icon_name, int icon_size,
+    const char* emblem_name, int emblem_size) {
+
+    GdkPixbuf* icon = load_icon(icon_name, icon_size);
+    GdkPixbuf* emblem = load_icon(emblem_name, emblem_size);
+    GdkPixbuf* composite = gdk_pixbuf_copy(icon);
+
+    int offset = icon_size - emblem_size;
+
+    gdk_pixbuf_composite(
+        emblem,                     // src
+        composite,                  // dst
+        offset,                     // dst_x
+        offset,                     // dst_y
+        emblem_size,                // dst_width
+        emblem_size,                // dst_height
+        offset,                     // offset_x
+        offset,                     // offset_y
+        1.0,                        // scale_x
+        1.0,                        // scale_y
+        0,                          // interpolation mode (ignored?)
+        255                         // alpha
+    );
+
+    g_object_unref(icon);
+    g_object_unref(emblem);
+
+    return composite;
 }
 
 static void add_style_class(GtkWidget* widget, const char* style_class) {
@@ -70,6 +103,11 @@ int main(int argc, char* argv[]) {
     GtkTreeIter item;
     GList* icon_list;
     GdkPixbuf* up_icon;
+    GdkPixbuf* documents_icon;
+    GdkPixbuf* downloads_icon;
+    GdkPixbuf* system_icon;
+    GdkPixbuf* audio_icon;
+    GdkPixbuf* photos_icon;
     GdkPixbuf* folder_icon;
     GdkPixbuf* text_icon;
     GdkPixbuf* bin_icon;
@@ -103,7 +141,12 @@ int main(int argc, char* argv[]) {
     gtk_header_bar_set_subtitle(GTK_HEADER_BAR(header), gfile_app_get_path(app));
     gtk_header_bar_pack_start(GTK_HEADER_BAR(header), header_box);
 
-    up_icon = load_icon("go-up", 48);
+    up_icon = load_icon("go-previous", 48);
+    documents_icon = load_icon_with_emblem("folder", 48, "emblem-documents", 24);
+    downloads_icon = load_icon_with_emblem("folder", 48, "emblem-downloads", 24);
+    system_icon = load_icon_with_emblem("folder", 48, "emblem-system", 24);
+    audio_icon = load_icon_with_emblem("folder", 48, "audio-x-generic", 24);
+    photos_icon = load_icon_with_emblem("folder", 48, "emblem-photos", 24);
     folder_icon = load_icon("folder", 48);
     text_icon = load_icon("text-x-generic", 48);
     bin_icon = load_icon("application-octet-stream", 48);
@@ -112,11 +155,21 @@ int main(int argc, char* argv[]) {
     gtk_list_store_append(files, &item);
     gtk_list_store_set(files, &item, 0, 0, 1, "", 2, up_icon, -1);
     gtk_list_store_append(files, &item);
-    gtk_list_store_set(files, &item, 0, 1, 1, "Documents", 2, folder_icon, -1);
+    gtk_list_store_set(files, &item, 0, 1, 1, "Documents", 2, documents_icon, -1);
     gtk_list_store_append(files, &item);
-    gtk_list_store_set(files, &item, 0, 2, 1, "foo.txt", 2, text_icon, -1);
+    gtk_list_store_set(files, &item, 0, 2, 1, "Downloads", 2, downloads_icon, -1);
     gtk_list_store_append(files, &item);
-    gtk_list_store_set(files, &item, 0, 3, 1, "data.bin", 2, bin_icon, -1);
+    gtk_list_store_set(files, &item, 0, 3, 1, "GNUstep", 2, system_icon, -1);
+    gtk_list_store_append(files, &item);
+    gtk_list_store_set(files, &item, 0, 4, 1, "Music", 2, audio_icon, -1);
+    gtk_list_store_append(files, &item);
+    gtk_list_store_set(files, &item, 0, 5, 1, "Pictures", 2, photos_icon, -1);
+    gtk_list_store_append(files, &item);
+    gtk_list_store_set(files, &item, 0, 6, 1, "Projects", 2, folder_icon, -1);
+    gtk_list_store_append(files, &item);
+    gtk_list_store_set(files, &item, 0, 7, 1, "foo.txt", 2, text_icon, -1);
+    gtk_list_store_append(files, &item);
+    gtk_list_store_set(files, &item, 0, 8, 1, "data.bin", 2, bin_icon, -1);
 
     file_view = gtk_icon_view_new_with_model(GTK_TREE_MODEL(files));
     gtk_icon_view_set_selection_mode(GTK_ICON_VIEW(file_view), GTK_SELECTION_MULTIPLE);
