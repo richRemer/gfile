@@ -72,6 +72,7 @@ int main(int argc, char* argv[]) {
     GdkPixbuf* up_icon;
     GdkPixbuf* folder_icon;
     GdkPixbuf* text_icon;
+    GdkPixbuf* bin_icon;
 
     gtk_init(&argc, &argv);
     init_styles();
@@ -105,6 +106,7 @@ int main(int argc, char* argv[]) {
     up_icon = load_icon("go-up", 48);
     folder_icon = load_icon("folder", 48);
     text_icon = load_icon("text-x-generic", 48);
+    bin_icon = load_icon("application-octet-stream", 48);
 
     files = gtk_list_store_new(3, G_TYPE_INT, G_TYPE_STRING, GDK_TYPE_PIXBUF);
     gtk_list_store_append(files, &item);
@@ -113,6 +115,8 @@ int main(int argc, char* argv[]) {
     gtk_list_store_set(files, &item, 0, 1, 1, "Documents", 2, folder_icon, -1);
     gtk_list_store_append(files, &item);
     gtk_list_store_set(files, &item, 0, 2, 1, "foo.txt", 2, text_icon, -1);
+    gtk_list_store_append(files, &item);
+    gtk_list_store_set(files, &item, 0, 3, 1, "data.bin", 2, bin_icon, -1);
 
     file_view = gtk_icon_view_new_with_model(GTK_TREE_MODEL(files));
     gtk_icon_view_set_selection_mode(GTK_ICON_VIEW(file_view), GTK_SELECTION_MULTIPLE);
