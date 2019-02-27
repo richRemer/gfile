@@ -100,7 +100,7 @@ int main(int argc, char* argv[]) {
 
     header = gtk_header_bar_new();
     gtk_header_bar_set_title(GTK_HEADER_BAR(header), gfile_app_get_basename(app));
-    gtk_header_bar_set_has_subtitle(GTK_HEADER_BAR(header), FALSE);
+    gtk_header_bar_set_subtitle(GTK_HEADER_BAR(header), gfile_app_get_path(app));
     gtk_header_bar_pack_start(GTK_HEADER_BAR(header), header_box);
 
     up_icon = load_icon("go-up", 48);
