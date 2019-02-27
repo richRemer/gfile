@@ -87,6 +87,18 @@ static void add_style_class(GtkWidget* widget, const char* style_class) {
     gtk_style_context_add_class(styles, style_class);
 }
 
+static void activate(GtkIconView* widget, GtkTreePath* path, gpointer data) {
+    GtkTreeModel* tree = GTK_TREE_MODEL(data);
+    GtkTreeIter iter;
+    GValue value = G_VALUE_INIT;
+
+    if (gtk_tree_model_get_iter(tree, &iter, path)) {
+        gtk_tree_model_get_value(tree, &iter, 3, &value);
+        printf("%s\n", g_value_get_string(&value));
+        g_value_unset(&value);
+    }
+}
+
 int main(int argc, char* argv[]) {
     GFileApp app = create_gfile_app();
     GtkWidget* window;
@@ -152,31 +164,32 @@ int main(int argc, char* argv[]) {
     text_icon = load_icon("text-x-generic", 48);
     bin_icon = load_icon("application-octet-stream", 48);
 
-    files = gtk_list_store_new(3, G_TYPE_INT, G_TYPE_STRING, GDK_TYPE_PIXBUF);
+    files = gtk_list_store_new(4, G_TYPE_INT, G_TYPE_STRING, GDK_TYPE_PIXBUF, G_TYPE_STRING);
     gtk_list_store_append(files, &item);
-    gtk_list_store_set(files, &item, 0, 0, 1, "", 2, up_icon, -1);
+    gtk_list_store_set(files, &item, 0, 0, 1, "", 2, up_icon, 3, "/home", -1);
     gtk_list_store_append(files, &item);
-    gtk_list_store_set(files, &item, 0, 1, 1, "Documents", 2, documents_icon, -1);
+    gtk_list_store_set(files, &item, 0, 1, 1, "Documents", 2, documents_icon, 3, "/home/rremer/Documents", -1);
     gtk_list_store_append(files, &item);
-    gtk_list_store_set(files, &item, 0, 2, 1, "Downloads", 2, downloads_icon, -1);
+    gtk_list_store_set(files, &item, 0, 2, 1, "Downloads", 2, downloads_icon, 3, "/home/rremer/Downloads", -1);
     gtk_list_store_append(files, &item);
-    gtk_list_store_set(files, &item, 0, 3, 1, "GNUstep", 2, system_icon, -1);
+    gtk_list_store_set(files, &item, 0, 3, 1, "GNUstep", 2, system_icon, 3, "/home/rremer/GNUstep", -1);
     gtk_list_store_append(files, &item);
-    gtk_list_store_set(files, &item, 0, 4, 1, "Music", 2, audio_icon, -1);
+    gtk_list_store_set(files, &item, 0, 4, 1, "Music", 2, audio_icon, 3, "/home/rremer/Music", -1);
     gtk_list_store_append(files, &item);
-    gtk_list_store_set(files, &item, 0, 5, 1, "Pictures", 2, photos_icon, -1);
+    gtk_list_store_set(files, &item, 0, 5, 1, "Pictures", 2, photos_icon, 3, "/home/rremer/Pictures", -1);
     gtk_list_store_append(files, &item);
-    gtk_list_store_set(files, &item, 0, 6, 1, "Projects", 2, folder_icon, -1);
+    gtk_list_store_set(files, &item, 0, 6, 1, "Projects", 2, folder_icon, 3, "/home/rremer/Projects", -1);
     gtk_list_store_append(files, &item);
-    gtk_list_store_set(files, &item, 0, 7, 1, "foo.txt", 2, text_icon, -1);
+    gtk_list_store_set(files, &item, 0, 7, 1, "foo.txt", 2, text_icon, 3, "/home/rremer/foo.txt", -1);
     gtk_list_store_append(files, &item);
-    gtk_list_store_set(files, &item, 0, 8, 1, "data.bin", 2, bin_icon, -1);
+    gtk_list_store_set(files, &item, 0, 8, 1, "data.bin", 2, bin_icon, 3, "/home/rremer/data.bin", -1);
 
     file_view = gtk_icon_view_new_with_model(GTK_TREE_MODEL(files));
     gtk_icon_view_set_selection_mode(GTK_ICON_VIEW(file_view), GTK_SELECTION_MULTIPLE);
     gtk_icon_view_set_item_width(GTK_ICON_VIEW(file_view), 64);
     gtk_icon_view_set_text_column(GTK_ICON_VIEW(file_view), 1);
     gtk_icon_view_set_pixbuf_column(GTK_ICON_VIEW(file_view), 2);
+    g_signal_connect(G_OBJECT(file_view), "item-activated", G_CALLBACK(activate), files);
 
     scroll_view = gtk_scrolled_window_new(NULL, NULL);
     gtk_container_add(GTK_CONTAINER(scroll_view), file_view);
