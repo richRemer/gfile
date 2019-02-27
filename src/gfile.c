@@ -98,6 +98,7 @@ int main(int argc, char* argv[]) {
     GtkWidget* path_home_button;
     GtkWidget* path_right_button;
     GtkWidget* path_other_buttons[1] = {NULL};
+    GtkWidget* scroll_view;
     GtkWidget* file_view;
     GtkListStore* files;
     GtkTreeIter item;
@@ -177,8 +178,11 @@ int main(int argc, char* argv[]) {
     gtk_icon_view_set_text_column(GTK_ICON_VIEW(file_view), 1);
     gtk_icon_view_set_pixbuf_column(GTK_ICON_VIEW(file_view), 2);
 
+    scroll_view = gtk_scrolled_window_new(NULL, NULL);
+    gtk_container_add(GTK_CONTAINER(scroll_view), file_view);
+
     window_box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
-    gtk_box_pack_start(GTK_BOX(window_box), file_view, TRUE, TRUE, 0);
+    gtk_box_pack_start(GTK_BOX(window_box), scroll_view, TRUE, TRUE, 0);
 
     window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
     gtk_window_set_title(GTK_WINDOW(window), "Files");
