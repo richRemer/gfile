@@ -14,6 +14,9 @@ ldflags = $(shell pkg-config --libs $(deps))
 
 default: build
 
+debug: build
+	GTK_DEBUG=interactive $(bin)/$(app)
+
 build: $(bin)/$(app)
 
 install: $(bin)/$(app)
@@ -38,4 +41,4 @@ $(build)/%.css: $(src)/%.css
 $(build)/%.o: $(src)/%.c
 	$(cc) $(cflags) -c $< -o $@
 
-.PHONY: default build install clean
+.PHONY: default build install clean debug
