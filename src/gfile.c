@@ -99,12 +99,12 @@ int main(int argc, char* argv[]) {
     gtk_header_bar_set_has_subtitle(GTK_HEADER_BAR(header), FALSE);
     gtk_header_bar_pack_start(GTK_HEADER_BAR(header), header_box);
 
-    folder_icon = load_icon("folder", 32);
-    text_icon = load_icon("text-x-generic", 32);
+    folder_icon = load_icon("go-previous", 48);
+    text_icon = load_icon("text-x-generic", 48);
 
     files = gtk_list_store_new(3, G_TYPE_INT, G_TYPE_STRING, GDK_TYPE_PIXBUF);
     gtk_list_store_append(files, &item);
-    gtk_list_store_set(files, &item, 0, 0, 1, "..", 2, folder_icon, -1);
+    gtk_list_store_set(files, &item, 0, 0, 1, "", 2, folder_icon, -1);
     gtk_list_store_append(files, &item);
     gtk_list_store_set(files, &item, 0, 1, 1, "foo", 2, text_icon, -1);
 
