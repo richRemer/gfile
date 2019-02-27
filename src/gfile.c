@@ -6,7 +6,7 @@
 extern unsigned char gfile_css[];
 extern unsigned int gfile_css_len;
 
-#define HEADER_BAR
+//#define HEADER_BAR
 #define OPEN_CMD "xdg-open"
 
 static void init_styles() {
