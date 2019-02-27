@@ -56,7 +56,7 @@ static void activate(GtkIconView* widget, GtkTreePath* path, gpointer data) {
 }
 
 int main(int argc, char* argv[]) {
-    GFileApp app = create_gfile_app();
+    GFileApp app = gfile_app_new();
     GtkWidget* window;
     GtkWidget* window_box;
     GtkWidget* header;
@@ -165,7 +165,7 @@ int main(int argc, char* argv[]) {
 
     gtk_widget_show_all(window);
     gtk_main();
-    destroy_gfile_app(app);
+    gfile_app_destroy(app);
 
     return 0;
 }

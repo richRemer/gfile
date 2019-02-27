@@ -6,7 +6,7 @@
 #include "gfile-app.h"
 #include "gfile-error.h"
 
-GFileApp create_gfile_app() {
+GFileApp gfile_app_new() {
     GFileApp app;
     char* cwd;
 
@@ -62,7 +62,7 @@ const char* gfile_app_get_basename(GFileApp app) {
     return app->basename;
 }
 
-void destroy_gfile_app(GFileApp app) {
+void gfile_app_destroy(GFileApp app) {
     free((char*)app->path);
     free((char*)app->basename);
     free(app);
