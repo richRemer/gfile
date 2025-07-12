@@ -10,7 +10,7 @@ GFileApp gfile_app_new() {
     GFileApp app;
     char* cwd;
 
-    allocate(app = malloc(sizeof(struct GFileApp)));
+    allocate(app = calloc(1, sizeof(struct GFileApp)));
     allocate(cwd = getcwd(NULL, 0));
 
     if (!gfile_app_change_path(app, cwd)) {
