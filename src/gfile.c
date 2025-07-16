@@ -2,12 +2,13 @@
 #include <stdlib.h>
 #include <gtk/gtk.h>
 #include "gfile-app.h"
+#include "gfile-config.h"
 #include "icon.h"
 
 extern unsigned char gfile_css[];
 extern unsigned int gfile_css_len;
 
-//#define HEADER_BAR
+#define HEADER_BAR
 #define OPEN_CMD "xdg-open"
 
 static void init_styles() {
@@ -57,6 +58,7 @@ static void activate(GtkIconView* widget, GtkTreePath* path, gpointer data) {
 
 int main(int argc, char* argv[]) {
     GFileApp app = gfile_app_new();
+    GFileConfig config = gfile_config_load();
     GtkWidget* window;
     GtkWidget* window_box;
     GtkWidget* header;
@@ -88,20 +90,20 @@ int main(int argc, char* argv[]) {
 
     path_left_button = gtk_button_new_with_label("◀");
     path_root_button = gtk_button_new_from_icon_name("drive-harddisk", GTK_ICON_SIZE_BUTTON);
-    path_other_buttons[0] = gtk_button_new_with_label("home");
+    //path_other_buttons[0] = gtk_button_new_with_label("home");
     path_home_button = gtk_button_new_from_icon_name("go-home", GTK_ICON_SIZE_BUTTON);
     path_right_button = gtk_button_new_with_label("▶");
 
     gtk_widget_set_sensitive(path_left_button, FALSE);
     gtk_widget_set_sensitive(path_right_button, FALSE);
     gtk_widget_set_visible(path_root_button, FALSE);
-    gtk_widget_set_visible(path_other_buttons[0], FALSE);
+    //gtk_widget_set_visible(path_other_buttons[0], FALSE);
 
     header_box = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
     add_style_class(header_box, GTK_STYLE_CLASS_LINKED);
     gtk_box_pack_start(GTK_BOX(header_box), path_left_button, FALSE, TRUE, 0);
     gtk_box_pack_start(GTK_BOX(header_box), path_root_button, TRUE, TRUE, 0);
-    gtk_box_pack_start(GTK_BOX(header_box), path_other_buttons[0], TRUE, TRUE, 0);
+    //gtk_box_pack_start(GTK_BOX(header_box), path_other_buttons[0], TRUE, TRUE, 0);
     gtk_box_pack_start(GTK_BOX(header_box), path_home_button, TRUE, TRUE, 0);
     gtk_box_pack_start(GTK_BOX(header_box), path_right_button, FALSE, TRUE, 0);
 
@@ -165,6 +167,7 @@ int main(int argc, char* argv[]) {
 
     gtk_widget_show_all(window);
     gtk_main();
+    gfile_config_destroy(config);
     gfile_app_destroy(app);
 
     return 0;
